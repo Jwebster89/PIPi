@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+#from Bio import SeqIO
+#from Bio.Nexus import Nexus
+#import csv
+#import shutil
 import os, sys, subprocess, argparse
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,12 +48,15 @@ class Pesti():
 				if ext == ".fastq":
 					print(f"Mapping reads from {file} to data/pestivirus_full_genomes.fasta")
 					sam=subprocess.Popen(['bwa','mem','-t',threads,'PIPi_index_temp',os.path.join(outdir,"1_trimming",file)],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
-					sort=subprocess.Popen(['samtools','sort','-'],stdin=sam.stdout,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
-					subprocess.run(['samtools','coverage', '-o',os.path.join(outdir,"2_map2ref",base+".sort.cov"),'-'],stdin=sort.stdout)
+					subprocess.run(['samtools','sort', '-o',os.path.join(outdir,'2_map2ref',base+'.sort.bam'),'-'],stdin=sam.stdout,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+					subprocess.run(['samtools','coverage', '-o',os.path.join(outdir,"2_map2ref",base+".sort.cov"),os.path.join(outdir,'2_map2ref',base+'.sort.bam')],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+					subprocess.run(['samtools','index',os.path.join(outdir,'2_map2ref',base+'.sort.bam')])
+					with open(os.path.join(outdir,'2_map2ref',base+'.sort.bedcov'),'wb') as fh:
+						subprocess.Popen(['samtools','bedcov','data/WG_BVDV.20190405.designed.bed',os.path.join(outdir,'2_map2ref',base+'.sort.bam')],stdout=fh,stderr=subprocess.DEVNULL )
 					print(f"Calculating coverage for {file}\n")
 
 
-		def output_graph(self,dataframe,outdir,base):
+		def output_graph_cov(self,dataframe,outdir,base):
 			if not os.path.exists(os.path.join(outdir,"graphs")):
 				os.mkdir(os.path.join(outdir,"graphs"))
 			subset=dataframe[["#rname","Percentage"]]
@@ -76,7 +83,18 @@ class Pesti():
 					df["Percentage"]=percentage
 					sorted=df.loc[(df['Percentage'] >= 5)].sort_values(by="Percentage", ascending=False).round({'Percentage':2})
 					sorted.to_csv(os.path.join(outdir,'2_map2ref',base+'cov_results.csv'))
-					self.output_graph(sorted,outdir,base)
+					self.output_graph_cov(sorted,outdir,base)
+
+		def parse_bedcov(self,outdir):
+			for file in os.listdir(os.path.join(outdir,"2_map2ref")):
+				(base,ext)=os.path.splitext(file)
+				if ext == ".bedcov":
+					df=pd.read_csv(os.path.join(outdir,"2_map2ref",file),sep="\t", header=None)
+					total=df[6].sum()
+					percentage=df[6] / total *100
+					df["Percentage"]=percentage
+					sorted=df.loc[(df['Percentage'] >= 1)].sort_values(by="Percentage", ascending=False).round({'Percentage':2})
+					sorted.to_csv(os.path.join(outdir,'2_map2ref',base+'bedcov_results.csv'))
 
 		def run(self):
 			if not os.path.exists(self.outdir):
@@ -96,6 +114,7 @@ class Pesti():
 			self.trimming(self.path,self.outdir)
 			self.map2ref(self.path, self.outdir, self.threads,self.refs)
 			self.parse_cov(self.outdir)
+			self.parse_bedcov(self.outdir)
 			#TBC
 			#self.IRMA 
 			#self.assembly
