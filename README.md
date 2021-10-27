@@ -1,6 +1,7 @@
 # PIPi
 (P)estivirus (I)dentification (P)ipeline
 
+== Not Ready for Public Use ==
 ## Dependencies
 The following are required for PIPi to function
 
