@@ -4,13 +4,13 @@
 ## Dependencies
 The following are required for PIPi to function
 
-[fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-[bbduk.sh](https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/installation-guide/)
-[bwa](https://github.com/lh3/bwa)
-[samtools=1.13](http://www.htslib.org/)
-[pandas](https://pandas.pydata.org/)
-[numpy](https://numpy.org/)
-[matplotlib](https://matplotlib.org/)
+- [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [bbduk.sh](https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/installation-guide/)
+- [bwa](https://github.com/lh3/bwa)
+- [samtools=1.13](http://www.htslib.org/)
+- [pandas](https://pandas.pydata.org/)
+- umpy](https://numpy.org/)
+- atplotlib](https://matplotlib.org/)
 
 ## Installing dependencies
 This can be easily achieved in a conda virtual environment
@@ -19,7 +19,7 @@ conda create -n PIPi fastqc bbmap bwa samtools=1.13 pandas numpy matplotlib
 ```
 
 ## Quick Usage
-PIPi
+PIPi can be called as follows.
 ```
 ./PIPi.py -p <path/to/reads> -o <path/to/outdir> -t <num_threads> -r <path/to/reference.fasta>
 ```
