@@ -9,8 +9,8 @@ The following are required for PIPi to function
 - [bwa](https://github.com/lh3/bwa)
 - [samtools=1.13](http://www.htslib.org/)
 - [pandas](https://pandas.pydata.org/)
-- umpy](https://numpy.org/)
-- atplotlib](https://matplotlib.org/)
+- [numpy](https://numpy.org/)
+- [matplotlib](https://matplotlib.org/)
 
 ## Installing dependencies
 This can be easily achieved in a conda virtual environment
