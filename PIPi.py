@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-#from Bio import SeqIO
-#from Bio.Nexus import Nexus
-#import csv
-#import shutil
 import os, sys, subprocess, argparse
 import pandas as pd
 import matplotlib.pyplot as plt
