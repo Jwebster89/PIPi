@@ -22,7 +22,7 @@ conda create -n PIPi fastqc bbmap bwa samtools=1.13 pandas numpy matplotlib
 ## Quick Usage
 PIPi can be called as follows.
 ```
-./PIPi.py -p <path/to/reads> -o <path/to/outdir> -t <num_threads> -r <path/to/reference.fasta>
+./PIPi.py -p <path/to/reads> -o <path/to/outdir> -t <num_threads> -r <path/to/reference.fasta> -a adapters.fa -b targets.bed
 ```
 
 ## Options and Usage
@@ -35,6 +35,10 @@ Required Arguments:
                         Output directory
   -r REFERENCE, --reference REFERENCE
                         Location of reference Pestivirus sequences
+  -a ADAPTERS, --adapters ADAPTERS
+                        Location of the adapter sequences fasta file
+  -b BED_FILE, --bed_file BED_FILE
+                        Location of the bed file of target regions
 
 Optional Arguments:
   -t THREADS, --threads THREADS
